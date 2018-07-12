@@ -10,6 +10,14 @@ Reference:
 cp data/*.txt dataset/ImageSets/
 ```
 
+# Setup
+```bash
+$ virutalenv -p python3 venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+$ cp <path_to>/ venv/lib/python3.6/site-packages
+```
+
 # Execution
 ```
 ######## Training on the kitti dataset ########
