@@ -1,4 +1,4 @@
-# CNN base 3D vehicle detection using LiDAR by Chainer
+# VoxelNet implementation in Chainer
 Reference:
 - VoxelNet [link](https://arxiv.org/pdf/1711.06396.pdf)
 
@@ -6,24 +6,30 @@ Reference:
 ## KITTI dataset
 - 3D Detection Dataset [link](http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=3d)  
 - (in data folder) train/val split [link](http://www.cs.toronto.edu/objprop3d/downloads.php)
+```
+cp data/*.txt dataset/ImageSets/
+```
 
 # Execution
 ```
-######## Training by kitti dataset ########
+######## Training on the kitti dataset ########
 python train.py experiments/orig_voxelnet/orig_voxelnet_single.yml
 
-######## Evaluation by kitti dataset ########
+######## Evaluation on the kitti dataset ########
 python evaluation.py experiments/orig_voxelnet/orig_voxelnet_eval.yml --gpu 0 --nms_thresh 0.5 --thresh 0.5
 
-・Provided by KITTI competition
-cd devkit_object/cpp
-g++ -O3 -DNDEBUG -o evaluate_object evaluate_object.cpp
-./evaluate_object ./results/result_dir
+・Split gt and result files into train/val
+python parse_dataset.py val.txt --gt_dir dataset/label_2/ --result_dir results/ --out_dir ../out/
 
-######## Inference by kitti dataset ########
+・Provided on the KITTI competition
+cd devkit_object/cpp
+g++ -O3 -DNDEBUG -o evaluate_object evaluate_object.cpp -lboost_system -lboost_filesystem
+cd ../.. && ./devkit_object/cpp/evaluate_object ./out/result ./out/gt
+
+######## Inference on the kitti dataset ########
 python demo.py experiments/orig_voxelnet/orig_voxelnet_demo.yml --gpu 0
 
-######## Visualize by kitti dataset ########
+######## Visualize on the kitti dataset ########
 ・Compate inputs for network by threshold
 python visualize.py --type input --config experiments/orig_voxelnet/orig_voxelnet_viz.yml
 ・Calculate statistic of raw data
